@@ -1,0 +1,171 @@
+import c from 'classnames';
+import { useState } from 'react';
+import { FaGithub, FaRocket } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
+export const HomePage = () => {
+  const [repoUrl, setRepoUrl] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Extract owner/repo from various GitHub URL formats
+    const patterns = [/github\.com\/([^/]+)\/([^/]+)/, /^([^/]+)\/([^/]+)$/];
+
+    for (const pattern of patterns) {
+      const match = repoUrl.match(pattern);
+      if (match) {
+        const [, owner, repo] = match;
+        if (owner && repo) {
+          navigate(`/${owner}/${repo.replace('.git', '')}`);
+          return;
+        }
+      }
+    }
+
+    // If no pattern matches, treat as direct owner/repo
+    alert('Please enter a valid GitHub repository URL or owner/repo format');
+  };
+
+  return (
+    <div className={c(['min-h-screen', 'flex', 'flex-col'])}>
+      {/* Header */}
+      <header className={c(['bg-white', 'border-b', 'border-gray-200'])}>
+        <div className={c(['max-w-7xl', 'mx-auto', 'px-4', 'sm:px-6', 'lg:px-8', 'py-6'])}>
+          <div className={c(['flex', 'items-center'])}>
+            <img src="/logo.svg" alt="GetHub.cc Logo" className={c(['w-8', 'h-8', 'mr-3'])} />
+            <h1 className={c(['text-2xl', 'font-bold', 'text-gray-900'])}>GetHub.cc</h1>
+          </div>
+          <p className={c(['text-gray-600', 'mt-2'])}>Streamlined downloads for GitHub releases</p>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main
+        className={c([
+          'flex-1',
+          'flex',
+          'items-center',
+          'justify-center',
+          'px-4',
+          'sm:px-6',
+          'lg:px-8'
+        ])}
+      >
+        <div className={c(['max-w-md', 'w-full', 'space-y-8'])}>
+          <div className={c(['text-center'])}>
+            <FaRocket className={c(['mx-auto', 'h-16', 'w-16', 'text-blue-600'])} />
+            <h2 className={c(['mt-6', 'text-3xl', 'font-extrabold', 'text-gray-900'])}>
+              Find Downloads Fast
+            </h2>
+            <p className={c(['mt-2', 'text-sm', 'text-gray-600'])}>
+              Enter a GitHub repository to get optimized download links
+            </p>
+          </div>
+
+          <form className={c(['mt-8', 'space-y-6'])} onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="repo-url" className={c(['sr-only'])}>
+                Repository URL or owner/repo
+              </label>
+              <div className={c(['relative'])}>
+                <div
+                  className={c([
+                    'absolute',
+                    'inset-y-0',
+                    'left-0',
+                    'pl-3',
+                    'flex',
+                    'items-center',
+                    'pointer-events-none'
+                  ])}
+                >
+                  <FaGithub className={c(['h-5', 'w-5', 'text-gray-400'])} />
+                </div>
+                <input
+                  id="repo-url"
+                  name="repo-url"
+                  type="text"
+                  required
+                  className={c([
+                    'block',
+                    'w-full',
+                    'pl-10',
+                    'pr-3',
+                    'py-3',
+                    'border',
+                    'border-gray-300',
+                    'rounded-md',
+                    'placeholder-gray-500',
+                    'text-gray-900',
+                    'focus:outline-none',
+                    'focus:ring-blue-500',
+                    'focus:border-blue-500',
+                    'sm:text-sm'
+                  ])}
+                  placeholder="owner/repo or github.com/owner/repo"
+                  value={repoUrl}
+                  onChange={(e) => setRepoUrl(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className={c([
+                  'group',
+                  'relative',
+                  'w-full',
+                  'flex',
+                  'justify-center',
+                  'py-3',
+                  'px-4',
+                  'border',
+                  'border-transparent',
+                  'text-sm',
+                  'font-medium',
+                  'rounded-md',
+                  'text-white',
+                  'bg-blue-600',
+                  'hover:bg-blue-700',
+                  'focus:outline-none',
+                  'focus:ring-2',
+                  'focus:ring-offset-2',
+                  'focus:ring-blue-500',
+                  'transition-colors',
+                  'duration-200'
+                ])}
+              >
+                Get Downloads
+              </button>
+            </div>
+          </form>
+
+          {/* Example */}
+          <div className={c(['text-center'])}>
+            <p className={c(['text-xs', 'text-gray-500'])}>
+              Example:{' '}
+              <button
+                onClick={() => setRepoUrl('tyrrrz/discordchatexporter')}
+                className={c(['text-blue-600', 'hover:text-blue-800'])}
+              >
+                tyrrrz/discordchatexporter
+              </button>
+            </p>
+          </div>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className={c(['bg-white', 'border-t', 'border-gray-200'])}>
+        <div className={c(['max-w-7xl', 'mx-auto', 'px-4', 'sm:px-6', 'lg:px-8', 'py-6'])}>
+          <p className={c(['text-center', 'text-sm', 'text-gray-600'])}>
+            Powered by GitHub API • Built for developers
+          </p>
+        </div>
+      </footer>
+    </div>
+  );
+};

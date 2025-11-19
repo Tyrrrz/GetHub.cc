@@ -1,0 +1,9 @@
+<!-- Simplified monochrome version for smaller sizes -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <!-- Simple background -->
+  <rect width="16" height="16" rx="3" fill="#2563eb"/>
+
+  <!-- Minimalist download icon -->
+  <path d="M8 3v7l-2-2m2 2l2-2" stroke="white" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <rect x="4" y="12" width="8" height="1" rx="0.5" fill="white"/>
+</svg>
