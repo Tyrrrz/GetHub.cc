@@ -354,19 +354,24 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
                     </div>
 
                     <div className="flex items-center text-sm text-gray-600 dark:text-gray-300 mt-1 space-x-4">
-                      <span>{formatFileSize(asset.size)}</span>
-                      <span>{asset.download_count.toLocaleString()} downloads</span>
                       {/* Display platform info from manifest or detection */}
                       {(asset.matchedRule || asset.detectedPlatform) && (
                         <>
                           {(asset.matchedRule?.os || asset.detectedPlatform?.os) && (
-                            <span>
+                            <span className="font-bold">
                               {formatPlatform(
                                 (asset.matchedRule?.os || asset.detectedPlatform?.os)!,
                                 asset.matchedRule?.arch || asset.detectedPlatform?.arch
                               )}
                             </span>
                           )}
+                        </>
+                      )}
+                      <span>{formatFileSize(asset.size)}</span>
+                      <span>{asset.download_count.toLocaleString()} downloads</span>
+                      {/* Display tags from manifest or detection */}
+                      {(asset.matchedRule || asset.detectedPlatform) && (
+                        <>
                           {((asset.matchedRule?.tags && asset.matchedRule.tags.length > 0) ||
                             (asset.detectedPlatform?.tags &&
                               asset.detectedPlatform.tags.length > 0)) && (
