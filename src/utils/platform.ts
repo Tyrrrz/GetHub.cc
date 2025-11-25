@@ -46,9 +46,7 @@ export const detectPlatform = (): PlatformInfo => {
   return { os, arch };
 };
 
-export const formatPlatform = (os?: OS, arch?: Architecture): string => {
-  if (!os && !arch) return 'Any platform';
-
+export const formatOS = (os: OS): string => {
   const osNames: Record<OS, string> = {
     windows: 'Windows',
     linux: 'Linux',
@@ -56,6 +54,10 @@ export const formatPlatform = (os?: OS, arch?: Architecture): string => {
     android: 'Android'
   };
 
+  return osNames[os];
+};
+
+export const formatArchitecture = (arch: Architecture): string => {
   const archNames: Record<Architecture, string> = {
     x86: 'x86',
     x64: 'x64',
@@ -63,8 +65,14 @@ export const formatPlatform = (os?: OS, arch?: Architecture): string => {
     arm64: 'ARM64'
   };
 
-  const osName = os ? osNames[os] : '';
-  const archName = arch ? archNames[arch] : '';
+  return archNames[arch];
+};
+
+export const formatPlatform = (os?: OS, arch?: Architecture): string => {
+  if (!os && !arch) return 'Any platform';
+
+  const osName = os ? formatOS(os) : '';
+  const archName = arch ? formatArchitecture(arch) : '';
 
   return [osName, archName].filter(Boolean).join(' ');
 };

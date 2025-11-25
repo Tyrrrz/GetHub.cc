@@ -2,7 +2,7 @@ import type { GitHubRelease } from '@/utils/github';
 import type { Architecture, Manifest, OS, Rule } from '@/utils/manifest';
 import { detectAssetPlatform, matchAsset } from '@/utils/manifest';
 import type { PlatformInfo } from '@/utils/platform';
-import { formatPlatform } from '@/utils/platform';
+import { formatArchitecture, formatOS } from '@/utils/platform';
 import c from 'classnames';
 import { useMemo, useState } from 'react';
 import { FaCalendarAlt, FaDownload, FaFilter, FaTag } from 'react-icons/fa';
@@ -127,7 +127,7 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
 
     return Array.from(osSet).map((os) => ({
       value: os,
-      label: formatPlatform(os as OS, undefined)
+      label: formatOS(os as OS)
     }));
   }, [manifest, enrichedReleases]);
 
@@ -368,14 +368,13 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
                             asset.detectedPlatform?.arch) && <span>•</span>}
                           {(asset.matchedRule?.os || asset.detectedPlatform?.os) && (
                             <span className="px-2 py-0.5 border-2 border-blue-500 dark:border-blue-400 text-blue-700 dark:text-blue-300 text-xs font-medium rounded">
-                              {formatPlatform(asset.matchedRule?.os || asset.detectedPlatform?.os)}
+                              {formatOS((asset.matchedRule?.os || asset.detectedPlatform?.os)!)}
                             </span>
                           )}
                           {(asset.matchedRule?.arch || asset.detectedPlatform?.arch) && (
                             <span className="px-2 py-0.5 border-2 border-blue-500 dark:border-blue-400 text-blue-700 dark:text-blue-300 text-xs font-medium rounded">
-                              {formatPlatform(
-                                undefined,
-                                asset.matchedRule?.arch || asset.detectedPlatform?.arch
+                              {formatArchitecture(
+                                (asset.matchedRule?.arch || asset.detectedPlatform?.arch)!
                               )}
                             </span>
                           )}
