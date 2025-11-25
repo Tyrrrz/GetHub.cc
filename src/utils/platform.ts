@@ -52,7 +52,8 @@ export const formatPlatform = (os?: OS, arch?: Architecture): string => {
   const osNames: Record<OS, string> = {
     windows: 'Windows',
     linux: 'Linux',
-    osx: 'macOS'
+    osx: 'macOS',
+    android: 'Android'
   };
 
   const archNames: Record<Architecture, string> = {

@@ -333,12 +333,11 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
                       {/* Display platform info from manifest or detection */}
                       {(asset.matchedRule || asset.detectedPlatform) && (
                         <>
-                          {((asset.matchedRule?.os && asset.matchedRule?.arch) ||
-                            (asset.detectedPlatform?.os && asset.detectedPlatform?.arch)) && (
+                          {(asset.matchedRule?.os || asset.detectedPlatform?.os) && (
                             <span>
                               {formatPlatform(
                                 (asset.matchedRule?.os || asset.detectedPlatform?.os)!,
-                                (asset.matchedRule?.arch || asset.detectedPlatform?.arch)!
+                                (asset.matchedRule?.arch || asset.detectedPlatform?.arch)
                               )}
                             </span>
                           )}
