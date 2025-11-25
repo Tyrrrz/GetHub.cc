@@ -29,15 +29,27 @@ export const HomePage = () => {
   };
 
   return (
-    <div className={c(['min-h-screen', 'flex', 'flex-col'])}>
+    <div className={c(['min-h-screen', 'flex', 'flex-col', 'bg-gray-50', 'dark:bg-gray-900'])}>
       {/* Header */}
-      <header className={c(['bg-white', 'border-b', 'border-gray-200'])}>
+      <header
+        className={c([
+          'bg-white',
+          'dark:bg-gray-800',
+          'border-b',
+          'border-gray-200',
+          'dark:border-gray-700'
+        ])}
+      >
         <div className={c(['max-w-7xl', 'mx-auto', 'px-4', 'sm:px-6', 'lg:px-8', 'py-6'])}>
           <div className={c(['flex', 'items-center'])}>
             <img src="/logo.svg" alt="GetHub.cc Logo" className={c(['w-8', 'h-8', 'mr-3'])} />
-            <h1 className={c(['text-2xl', 'font-bold', 'text-gray-900'])}>GetHub.cc</h1>
+            <h1 className={c(['text-2xl', 'font-bold', 'text-gray-900', 'dark:text-white'])}>
+              GetHub.cc
+            </h1>
           </div>
-          <p className={c(['text-gray-600', 'mt-2'])}>Streamlined downloads for GitHub releases</p>
+          <p className={c(['text-gray-600', 'dark:text-gray-300', 'mt-2'])}>
+            Streamlined downloads for GitHub releases
+          </p>
         </div>
       </header>
 
@@ -55,11 +67,21 @@ export const HomePage = () => {
       >
         <div className={c(['max-w-md', 'w-full', 'space-y-8'])}>
           <div className={c(['text-center'])}>
-            <FaRocket className={c(['mx-auto', 'h-16', 'w-16', 'text-blue-600'])} />
-            <h2 className={c(['mt-6', 'text-3xl', 'font-extrabold', 'text-gray-900'])}>
+            <FaRocket
+              className={c(['mx-auto', 'h-16', 'w-16', 'text-blue-600', 'dark:text-blue-400'])}
+            />
+            <h2
+              className={c([
+                'mt-6',
+                'text-3xl',
+                'font-extrabold',
+                'text-gray-900',
+                'dark:text-white'
+              ])}
+            >
               Find Downloads Fast
             </h2>
-            <p className={c(['mt-2', 'text-sm', 'text-gray-600'])}>
+            <p className={c(['mt-2', 'text-sm', 'text-gray-600', 'dark:text-gray-300'])}>
               Enter a GitHub repository to get optimized download links
             </p>
           </div>
@@ -96,9 +118,14 @@ export const HomePage = () => {
                     'py-3',
                     'border',
                     'border-gray-300',
+                    'dark:border-gray-600',
                     'rounded-md',
                     'placeholder-gray-500',
+                    'dark:placeholder-gray-400',
                     'text-gray-900',
+                    'dark:text-white',
+                    'bg-white',
+                    'dark:bg-gray-700',
                     'focus:outline-none',
                     'focus:ring-blue-500',
                     'focus:border-blue-500',
@@ -145,11 +172,16 @@ export const HomePage = () => {
 
           {/* Example */}
           <div className={c(['text-center'])}>
-            <p className={c(['text-xs', 'text-gray-500'])}>
+            <p className={c(['text-xs', 'text-gray-500', 'dark:text-gray-400'])}>
               Example:{' '}
               <button
                 onClick={() => setRepoUrl('tyrrrz/discordchatexporter')}
-                className={c(['text-blue-600', 'hover:text-blue-800'])}
+                className={c([
+                  'text-blue-600',
+                  'dark:text-blue-400',
+                  'hover:text-blue-800',
+                  'dark:hover:text-blue-300'
+                ])}
               >
                 tyrrrz/discordchatexporter
               </button>
@@ -159,9 +191,17 @@ export const HomePage = () => {
       </main>
 
       {/* Footer */}
-      <footer className={c(['bg-white', 'border-t', 'border-gray-200'])}>
+      <footer
+        className={c([
+          'bg-white',
+          'dark:bg-gray-800',
+          'border-t',
+          'border-gray-200',
+          'dark:border-gray-700'
+        ])}
+      >
         <div className={c(['max-w-7xl', 'mx-auto', 'px-4', 'sm:px-6', 'lg:px-8', 'py-6'])}>
-          <p className={c(['text-center', 'text-sm', 'text-gray-600'])}>
+          <p className={c(['text-center', 'text-sm', 'text-gray-600', 'dark:text-gray-300'])}>
             Powered by GitHub API • Built for developers
           </p>
         </div>
