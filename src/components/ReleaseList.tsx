@@ -42,31 +42,57 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
           const matchedRule = manifest.rules.find((rule) => matchAsset(asset.name, rule));
           if (matchedRule) {
             enrichedAsset.matchedRule = matchedRule;
-
-            // Check if this asset is recommended for user's platform
-            if (userPlatform.os && userPlatform.arch) {
-              enrichedAsset.isRecommended =
-                matchedRule.os === userPlatform.os && matchedRule.arch === userPlatform.arch;
-            }
           }
         } else {
           // Automatic platform detection when no manifest
           const detected = detectAssetPlatform(asset.name);
           if (detected.os || detected.arch || detected.tags) {
             enrichedAsset.detectedPlatform = detected;
-
-            // Check if this asset is recommended for user's platform
-            if (userPlatform.os && userPlatform.arch && detected.os && detected.arch) {
-              enrichedAsset.isRecommended =
-                detected.os === userPlatform.os && detected.arch === userPlatform.arch;
-            }
           }
         }
 
         return enrichedAsset;
       })
     }));
-  }, [releases, manifest, userPlatform]);
+  }, [releases, manifest]);
+
+  // Apply recommendation logic separately after enrichment
+  const releasesWithRecommendations = useMemo(() => {
+    return enrichedReleases.map((release) => {
+      // First pass: find exact OS+arch matches
+      let hasExactMatch = false;
+      const assetsWithRecommendations = release.assets.map((asset) => {
+        const assetOS = asset.matchedRule?.os || asset.detectedPlatform?.os;
+        const assetArch = asset.matchedRule?.arch || asset.detectedPlatform?.arch;
+
+        const isExactMatch =
+          userPlatform.os &&
+          userPlatform.arch &&
+          assetOS === userPlatform.os &&
+          assetArch === userPlatform.arch;
+
+        if (isExactMatch) {
+          hasExactMatch = true;
+        }
+
+        return { ...asset, isRecommended: isExactMatch };
+      });
+
+      // Second pass: if no exact match, recommend OS-only matches
+      if (!hasExactMatch && userPlatform.os) {
+        return {
+          ...release,
+          assets: assetsWithRecommendations.map((asset) => {
+            const assetOS = asset.matchedRule?.os || asset.detectedPlatform?.os;
+            const isOSMatch = assetOS === userPlatform.os;
+            return { ...asset, isRecommended: isOSMatch };
+          })
+        };
+      }
+
+      return { ...release, assets: assetsWithRecommendations };
+    });
+  }, [enrichedReleases, userPlatform]);
 
   // Get available filter options
   const availableVersions = useMemo(() => {
@@ -129,7 +155,7 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
 
   // Filter releases
   const filteredReleases = useMemo(() => {
-    let filtered = enrichedReleases;
+    let filtered = releasesWithRecommendations;
 
     // Version filter
     if (selectedVersion === 'latest') {
@@ -182,7 +208,7 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
           })
       }))
       .filter((release) => release.assets.length > 0);
-  }, [enrichedReleases, selectedVersion, osFilter, tagFilter]);
+  }, [releasesWithRecommendations, selectedVersion, osFilter, tagFilter]);
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 B';
@@ -337,7 +363,7 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
                             <span>
                               {formatPlatform(
                                 (asset.matchedRule?.os || asset.detectedPlatform?.os)!,
-                                (asset.matchedRule?.arch || asset.detectedPlatform?.arch)
+                                asset.matchedRule?.arch || asset.detectedPlatform?.arch
                               )}
                             </span>
                           )}

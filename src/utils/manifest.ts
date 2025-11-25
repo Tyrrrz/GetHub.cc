@@ -77,44 +77,38 @@ export const detectAssetPlatform = (
   const tags: string[] = [];
 
   // Detect OS
-  if (
-    /windows|win32|win64|win-x64|win-x86|win-arm64|\.exe$/i.test(lowerName) ||
-    /\bwin\b/i.test(lowerName)
-  ) {
+  if (/\b(windows|win32|win64|win-x64|win-x86|win-arm64)\b|\.exe$/i.test(lowerName)) {
     os = 'windows';
-  } else if (
-    /linux|ubuntu|debian|fedora|rhel|centos|AppImage/i.test(lowerName) ||
-    /\blinux\b/i.test(lowerName)
-  ) {
+  } else if (/\b(linux|ubuntu|debian|fedora|rhel|centos)\b|\.AppImage/i.test(lowerName)) {
     os = 'linux';
-  } else if (/macos|osx|darwin|mac-/i.test(lowerName) || /\bmac\b/i.test(lowerName)) {
+  } else if (/\b(macos|osx|darwin|mac)\b|mac-/i.test(lowerName)) {
     os = 'osx';
-  } else if (/android|\.apk$/i.test(lowerName)) {
+  } else if (/\bandroid\b|\.apk$/i.test(lowerName)) {
     os = 'android';
   }
 
   // Detect architecture
-  if (/x64|x86_64|amd64|win64/i.test(lowerName)) {
+  if (/\b(x64|x86_64|amd64|win64)\b/i.test(lowerName)) {
     arch = 'x64';
-  } else if (/x86|win32|i386|i686/i.test(lowerName) && !/x64|x86_64/.test(lowerName)) {
+  } else if (/\b(x86|win32|i386|i686)\b/i.test(lowerName)) {
     arch = 'x86';
-  } else if (/arm64|aarch64|apple-silicon/i.test(lowerName)) {
+  } else if (/\b(arm64|aarch64|apple-silicon)\b/i.test(lowerName)) {
     arch = 'arm64';
-  } else if (/\barm\b|armv7|armhf/i.test(lowerName) && !/arm64/.test(lowerName)) {
+  } else if (/\b(arm|armv7|armhf)\b/i.test(lowerName)) {
     arch = 'arm';
   }
 
   // Detect common tags
-  if (/portable|standalone/i.test(lowerName)) {
+  if (/\b(portable|standalone)\b/i.test(lowerName)) {
     tags.push('Portable');
   }
-  if (/installer|setup|msi/i.test(lowerName)) {
+  if (/\b(installer|setup|msi)\b/i.test(lowerName)) {
     tags.push('Installer');
   }
-  if (/cli|console/i.test(lowerName)) {
+  if (/\b(cli|console)\b/i.test(lowerName)) {
     tags.push('CLI');
   }
-  if (/gui|desktop/i.test(lowerName)) {
+  if (/\b(gui|desktop)\b/i.test(lowerName)) {
     tags.push('GUI');
   }
 
