@@ -1,7 +1,7 @@
 import c from 'classnames';
 import { useState } from 'react';
 import { FaGithub, FaRocket } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export const HomePage = () => {
   const [repoUrl, setRepoUrl] = useState('');
@@ -131,7 +131,7 @@ export const HomePage = () => {
                     'focus:border-blue-500',
                     'sm:text-sm'
                   ])}
-                  placeholder="owner/repo or github.com/owner/repo"
+                  placeholder="GitHub repository URL"
                   value={repoUrl}
                   onChange={(e) => setRepoUrl(e.target.value)}
                 />
@@ -170,22 +170,92 @@ export const HomePage = () => {
             </div>
           </form>
 
-          {/* Example */}
-          <div className={c(['text-center'])}>
-            <p className={c(['text-xs', 'text-gray-500', 'dark:text-gray-400'])}>
-              Example:{' '}
-              <button
-                onClick={() => setRepoUrl('tyrrrz/discordchatexporter')}
+          {/* Examples */}
+          <div className={c(['text-center', 'space-y-2'])}>
+            <p className={c(['text-xs', 'text-gray-500', 'dark:text-gray-400', 'font-medium'])}>
+              Examples:
+            </p>
+            <div className={c(['flex', 'flex-wrap', 'justify-center', 'gap-3', 'text-xs'])}>
+              <Link
+                to="/tyrrrz/discordchatexporter"
                 className={c([
                   'text-blue-600',
                   'dark:text-blue-400',
                   'hover:text-blue-800',
-                  'dark:hover:text-blue-300'
+                  'dark:hover:text-blue-300',
+                  'underline',
+                  'decoration-dotted',
+                  'underline-offset-2',
+                  'cursor-pointer'
                 ])}
               >
                 tyrrrz/discordchatexporter
-              </button>
-            </p>
+              </Link>
+              <span className={c(['text-gray-400', 'dark:text-gray-600'])}>•</span>
+              <Link
+                to="/obsidianmd/obsidian-releases"
+                className={c([
+                  'text-blue-600',
+                  'dark:text-blue-400',
+                  'hover:text-blue-800',
+                  'dark:hover:text-blue-300',
+                  'underline',
+                  'decoration-dotted',
+                  'underline-offset-2',
+                  'cursor-pointer'
+                ])}
+              >
+                obsidianmd/obsidian-releases
+              </Link>
+              <span className={c(['text-gray-400', 'dark:text-gray-600'])}>•</span>
+              <Link
+                to="/electron/electron"
+                className={c([
+                  'text-blue-600',
+                  'dark:text-blue-400',
+                  'hover:text-blue-800',
+                  'dark:hover:text-blue-300',
+                  'underline',
+                  'decoration-dotted',
+                  'underline-offset-2',
+                  'cursor-pointer'
+                ])}
+              >
+                electron/electron
+              </Link>
+              <span className={c(['text-gray-400', 'dark:text-gray-600'])}>•</span>
+              <Link
+                to="/vscode-icons/vscode-icons"
+                className={c([
+                  'text-blue-600',
+                  'dark:text-blue-400',
+                  'hover:text-blue-800',
+                  'dark:hover:text-blue-300',
+                  'underline',
+                  'decoration-dotted',
+                  'underline-offset-2',
+                  'cursor-pointer'
+                ])}
+              >
+                vscode-icons/vscode-icons
+              </Link>
+              <span className={c(['text-gray-400', 'dark:text-gray-600'])}>•</span>
+              <Link
+                to="/aristocratos/btop"
+                className={c([
+                  'text-blue-600',
+                  'dark:text-blue-400',
+                  'hover:text-blue-800',
+                  'dark:hover:text-blue-300',
+                  'underline',
+                  'decoration-dotted',
+                  'underline-offset-2',
+                  'cursor-pointer'
+                ])}
+              >
+                aristocratos/btop
+              </Link>
+            </div>
           </div>
         </div>
       </main>
