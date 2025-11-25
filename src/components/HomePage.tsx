@@ -29,25 +29,25 @@ export const HomePage = () => {
   };
 
   return (
-    <div className={c(['min-h-screen', 'flex', 'flex-col', 'bg-gray-50', 'dark:bg-gray-900'])}>
+    <div className={c(['min-h-screen', 'flex', 'flex-col', 'bg-slate-50', 'dark:bg-slate-950'])}>
       {/* Header */}
       <header
         className={c([
           'bg-white',
-          'dark:bg-gray-800',
+          'dark:bg-slate-900',
           'border-b',
-          'border-gray-200',
-          'dark:border-gray-700'
+          'border-slate-300',
+          'dark:border-slate-700'
         ])}
       >
         <div className={c(['max-w-7xl', 'mx-auto', 'px-4', 'sm:px-6', 'lg:px-8', 'py-6'])}>
           <div className={c(['flex', 'items-center'])}>
             <img src="/logo.svg" alt="GetHub.cc Logo" className={c(['w-8', 'h-8', 'mr-3'])} />
-            <h1 className={c(['text-2xl', 'font-bold', 'text-gray-900', 'dark:text-white'])}>
+            <h1 className={c(['text-2xl', 'font-bold', 'text-slate-900', 'dark:text-slate-50'])}>
               GetHub.cc
             </h1>
           </div>
-          <p className={c(['text-gray-600', 'dark:text-gray-300', 'mt-2'])}>
+          <p className={c(['text-slate-600', 'dark:text-slate-400', 'mt-2'])}>
             Streamlined downloads for GitHub releases
           </p>
         </div>
@@ -75,13 +75,13 @@ export const HomePage = () => {
                 'mt-6',
                 'text-3xl',
                 'font-extrabold',
-                'text-gray-900',
-                'dark:text-white'
+                'text-slate-900',
+                'dark:text-slate-50'
               ])}
             >
               Find Downloads Fast
             </h2>
-            <p className={c(['mt-2', 'text-sm', 'text-gray-600', 'dark:text-gray-300'])}>
+            <p className={c(['mt-2', 'text-sm', 'text-slate-600', 'dark:text-slate-400'])}>
               Enter a GitHub repository to get optimized download links
             </p>
           </div>
@@ -103,7 +103,9 @@ export const HomePage = () => {
                     'pointer-events-none'
                   ])}
                 >
-                  <FaGithub className={c(['h-5', 'w-5', 'text-gray-400'])} />
+                  <FaGithub
+                    className={c(['h-5', 'w-5', 'text-slate-600', 'dark:text-slate-400'])}
+                  />
                 </div>
                 <input
                   id="repo-url"
@@ -117,15 +119,15 @@ export const HomePage = () => {
                     'pr-3',
                     'py-3',
                     'border',
-                    'border-gray-300',
-                    'dark:border-gray-600',
+                    'border-slate-300',
+                    'dark:border-slate-700',
                     'rounded-md',
-                    'placeholder-gray-500',
-                    'dark:placeholder-gray-400',
-                    'text-gray-900',
-                    'dark:text-white',
+                    'placeholder-slate-600',
+                    'dark:placeholder-slate-500',
+                    'text-slate-900',
+                    'dark:text-slate-50',
                     'bg-white',
-                    'dark:bg-gray-700',
+                    'dark:bg-slate-950',
                     'focus:outline-none',
                     'focus:ring-blue-500',
                     'focus:border-blue-500',
@@ -155,12 +157,12 @@ export const HomePage = () => {
                   'font-medium',
                   'rounded-md',
                   'text-white',
-                  'bg-blue-600',
-                  'hover:bg-blue-700',
+                  'bg-green-600',
+                  'hover:bg-green-700',
                   'focus:outline-none',
                   'focus:ring-2',
                   'focus:ring-offset-2',
-                  'focus:ring-blue-500',
+                  'focus:ring-green-500',
                   'transition-colors',
                   'duration-200'
                 ])}
@@ -172,7 +174,7 @@ export const HomePage = () => {
 
           {/* Examples */}
           <div className={c(['text-center', 'space-y-2'])}>
-            <p className={c(['text-xs', 'text-gray-500', 'dark:text-gray-400', 'font-medium'])}>
+            <p className={c(['text-xs', 'text-slate-600', 'dark:text-slate-400', 'font-medium'])}>
               Examples:
             </p>
             <div className={c(['flex', 'flex-wrap', 'justify-center', 'gap-3', 'text-xs'])}>
@@ -181,7 +183,7 @@ export const HomePage = () => {
                 className={c([
                   'text-blue-600',
                   'dark:text-blue-400',
-                  'hover:text-blue-800',
+                  'hover:text-blue-700',
                   'dark:hover:text-blue-300',
                   'underline',
                   'decoration-dotted',
@@ -191,13 +193,13 @@ export const HomePage = () => {
               >
                 tyrrrz/discordchatexporter
               </Link>
-              <span className={c(['text-gray-400', 'dark:text-gray-600'])}>•</span>
+              <span className={c(['text-slate-300', 'dark:text-[#30363d]'])}>•</span>
               <Link
                 to="/obsidianmd/obsidian-releases"
                 className={c([
                   'text-blue-600',
                   'dark:text-blue-400',
-                  'hover:text-blue-800',
+                  'hover:text-blue-700',
                   'dark:hover:text-blue-300',
                   'underline',
                   'decoration-dotted',
@@ -207,13 +209,13 @@ export const HomePage = () => {
               >
                 obsidianmd/obsidian-releases
               </Link>
-              <span className={c(['text-gray-400', 'dark:text-gray-600'])}>•</span>
+              <span className={c(['text-slate-300', 'dark:text-[#30363d]'])}>•</span>
               <Link
                 to="/electron/electron"
                 className={c([
                   'text-blue-600',
                   'dark:text-blue-400',
-                  'hover:text-blue-800',
+                  'hover:text-blue-700',
                   'dark:hover:text-blue-300',
                   'underline',
                   'decoration-dotted',
@@ -223,13 +225,13 @@ export const HomePage = () => {
               >
                 electron/electron
               </Link>
-              <span className={c(['text-gray-400', 'dark:text-gray-600'])}>•</span>
+              <span className={c(['text-slate-300', 'dark:text-[#30363d]'])}>•</span>
               <Link
                 to="/vscode-icons/vscode-icons"
                 className={c([
                   'text-blue-600',
                   'dark:text-blue-400',
-                  'hover:text-blue-800',
+                  'hover:text-blue-700',
                   'dark:hover:text-blue-300',
                   'underline',
                   'decoration-dotted',
@@ -239,13 +241,13 @@ export const HomePage = () => {
               >
                 vscode-icons/vscode-icons
               </Link>
-              <span className={c(['text-gray-400', 'dark:text-gray-600'])}>•</span>
+              <span className={c(['text-slate-300', 'dark:text-[#30363d]'])}>•</span>
               <Link
                 to="/aristocratos/btop"
                 className={c([
                   'text-blue-600',
                   'dark:text-blue-400',
-                  'hover:text-blue-800',
+                  'hover:text-blue-700',
                   'dark:hover:text-blue-300',
                   'underline',
                   'decoration-dotted',
@@ -264,14 +266,14 @@ export const HomePage = () => {
       <footer
         className={c([
           'bg-white',
-          'dark:bg-gray-800',
+          'dark:bg-slate-900',
           'border-t',
-          'border-gray-200',
-          'dark:border-gray-700'
+          'border-slate-300',
+          'dark:border-slate-700'
         ])}
       >
         <div className={c(['max-w-7xl', 'mx-auto', 'px-4', 'sm:px-6', 'lg:px-8', 'py-6'])}>
-          <p className={c(['text-center', 'text-sm', 'text-gray-600', 'dark:text-gray-300'])}>
+          <p className={c(['text-center', 'text-sm', 'text-slate-600', 'dark:text-slate-400'])}>
             Powered by GitHub API • Built for developers
           </p>
         </div>

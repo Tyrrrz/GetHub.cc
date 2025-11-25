@@ -230,10 +230,10 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
   return (
     <div className={c(['space-y-6'])}>
       {/* Filters */}
-      <div className={c(['bg-white', 'dark:bg-gray-800', 'rounded-lg', 'shadow', 'p-6'])}>
+      <div className={c(['bg-white', 'dark:bg-slate-900', 'rounded-lg', 'shadow', 'p-6'])}>
         <div className={c(['flex', 'items-center', 'mb-4'])}>
-          <FaFilter className={c(['text-gray-500', 'dark:text-gray-400', 'mr-2'])} />
-          <h3 className={c(['text-lg', 'font-medium', 'text-gray-900', 'dark:text-white'])}>
+          <FaFilter className={c(['text-slate-600', 'dark:text-slate-400', 'mr-2'])} />
+          <h3 className={c(['text-lg', 'font-medium', 'text-slate-900', 'dark:text-slate-50'])}>
             Filters
           </h3>
         </div>
@@ -241,13 +241,13 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
         <div className={c(['grid', 'grid-cols-1', 'md:grid-cols-3', 'gap-4'])}>
           {/* Version Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <label className="block text-sm font-medium text-slate-900 dark:text-slate-50 mb-2">
               Version
             </label>
             <select
               value={selectedVersion}
               onChange={(e) => setSelectedVersion(e.target.value)}
-              className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="block w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-md text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             >
               {availableVersions.map((version) => (
                 <option key={version.value} value={version.value}>
@@ -260,13 +260,13 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
           {/* OS Filter */}
           {availableOS.length > 0 && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-slate-900 dark:text-slate-50 mb-2">
                 Operating System
               </label>
               <select
                 value={osFilter}
                 onChange={(e) => setOsFilter(e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-md text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="all">All Platforms</option>
                 {availableOS.map((os) => (
@@ -281,13 +281,13 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
           {/* Tag Filter */}
           {availableTags.length > 0 && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label className="block text-sm font-medium text-slate-900 dark:text-slate-50 mb-2">
                 Type
               </label>
               <select
                 value={tagFilter}
                 onChange={(e) => setTagFilter(e.target.value)}
-                className="block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full px-3 py-2 border border-slate-300 dark:border-slate-700 rounded-md text-sm bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="all">All Types</option>
                 {availableTags.map((tag) => (
@@ -303,28 +303,28 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
 
       {/* Releases */}
       {filteredReleases.map((release) => (
-        <div key={release.id} className="bg-white dark:bg-gray-800 rounded-lg shadow">
+        <div key={release.id} className="bg-white dark:bg-slate-900 rounded-lg shadow">
           {/* Release Header */}
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+          <div className="p-6 border-b border-slate-300 dark:border-slate-700">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <FaTag className="text-blue-600 dark:text-blue-400 mr-3" />
                 <div>
-                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  <h2 className="text-xl font-semibold text-slate-900 dark:text-slate-50">
                     {release.name}
                   </h2>
-                  <div className="flex items-center text-sm text-gray-600 dark:text-gray-300 mt-1">
+                  <div className="flex items-center text-sm text-slate-600 dark:text-slate-400 mt-1">
                     <FaCalendarAlt className="mr-1" />
                     {formatDate(release.published_at)}
                     {release.prerelease && (
-                      <span className="ml-3 px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 text-xs rounded">
+                      <span className="ml-3 px-2 py-1 bg-yellow-100 dark:bg-[rgba(187,128,9,0.15)] text-yellow-700 dark:text-yellow-500 text-xs rounded">
                         Pre-release
                       </span>
                     )}
                   </div>
                 </div>
               </div>
-              <div className="text-right text-sm text-gray-500 dark:text-gray-400">
+              <div className="text-right text-sm text-slate-600 dark:text-slate-400">
                 {release.assets.length} asset{release.assets.length !== 1 ? 's' : ''}
               </div>
             </div>
@@ -338,23 +338,23 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
                   key={asset.id}
                   className={`flex items-center justify-between p-4 rounded-lg border ${
                     asset.isRecommended
-                      ? 'border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30'
-                      : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                      ? 'border-[#0969da] dark:border-[#58a6ff] bg-blue-50 dark:bg-blue-900/10'
+                      : 'border-slate-300 dark:border-slate-700 hover:border-[#57606a] dark:hover:border-[#8b949e]'
                   } transition-colors`}
                 >
                   <div className="flex-1">
                     <div className="flex items-center">
-                      <h4 className="font-medium text-gray-900 dark:text-white mr-3">
+                      <h4 className="font-medium text-slate-900 dark:text-slate-50 mr-3">
                         {asset.name}
                       </h4>
                       {asset.isRecommended && (
-                        <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300 text-xs rounded">
+                        <span className="px-2 py-1 bg-[#0969da] dark:bg-[#58a6ff] text-white dark:text-[#0d1117] text-xs rounded">
                           Recommended
                         </span>
                       )}
                     </div>
 
-                    <div className="flex items-center text-sm text-gray-600 dark:text-gray-300 mt-1 space-x-4">
+                    <div className="flex items-center text-sm text-slate-600 dark:text-slate-400 mt-1 space-x-4">
                       {/* Display platform info from manifest or detection */}
                       {(asset.matchedRule || asset.detectedPlatform) && (
                         <>
@@ -381,7 +381,7 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
                                 (tag) => (
                                   <span
                                     key={tag}
-                                    className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded mr-1"
+                                    className="px-2 py-1 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-50 text-xs rounded mr-1"
                                   >
                                     {tag}
                                   </span>
@@ -394,13 +394,13 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
                     </div>
 
                     {asset.matchedRule?.description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                      <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
                         {asset.matchedRule.description}
                       </p>
                     )}
 
                     {asset.digest && (
-                      <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 font-mono break-all">
+                      <div className="mt-2 text-xs text-slate-600 dark:text-slate-400 font-mono break-all">
                         {asset.digest}
                       </div>
                     )}
@@ -408,7 +408,7 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
 
                   <a
                     href={asset.browser_download_url}
-                    className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                    className="ml-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
                   >
                     <FaDownload className="mr-2" />
                     Download
@@ -421,12 +421,12 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
       ))}
 
       {filteredReleases.length === 0 && (
-        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow">
-          <FaDownload className="h-16 w-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+        <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-lg shadow">
+          <FaDownload className="h-16 w-16 text-slate-600 dark:text-slate-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50 mb-2">
             No assets found
           </h3>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-slate-600 dark:text-slate-400">
             Try adjusting your filters to see more results.
           </p>
         </div>

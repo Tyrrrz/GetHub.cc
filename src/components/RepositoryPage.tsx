@@ -70,8 +70,8 @@ export const RepositoryPage = () => {
           'flex',
           'items-center',
           'justify-center',
-          'bg-gray-50',
-          'dark:bg-gray-900'
+          'bg-slate-50',
+          'dark:bg-slate-950'
         ])}
       >
         <div className={c(['text-center'])}>
@@ -86,7 +86,7 @@ export const RepositoryPage = () => {
               'mb-4'
             ])}
           />
-          <p className={c(['text-gray-600', 'dark:text-gray-300'])}>Loading repository data...</p>
+          <p className={c(['text-slate-600', 'dark:text-slate-400'])}>Loading repository data...</p>
         </div>
       </div>
     );
@@ -101,18 +101,33 @@ export const RepositoryPage = () => {
           'items-center',
           'justify-center',
           'px-4',
-          'bg-gray-50',
-          'dark:bg-gray-900'
+          'bg-slate-50',
+          'dark:bg-slate-950'
         ])}
       >
         <div className={c(['text-center', 'max-w-md'])}>
           <FaExclamationTriangle
-            className={c(['h-16', 'w-16', 'text-red-500', 'dark:text-red-400', 'mx-auto', 'mb-4'])}
+            className={c([
+              'h-16',
+              'w-16',
+              'text-red-600',
+              'dark:text-red-400',
+              'mx-auto',
+              'mb-4'
+            ])}
           />
-          <h2 className={c(['text-2xl', 'font-bold', 'text-gray-900', 'dark:text-white', 'mb-2'])}>
+          <h2
+            className={c([
+              'text-2xl',
+              'font-bold',
+              'text-slate-900',
+              'dark:text-slate-50',
+              'mb-2'
+            ])}
+          >
             Error
           </h2>
-          <p className={c(['text-gray-600', 'dark:text-gray-300', 'mb-6'])}>{error}</p>
+          <p className={c(['text-slate-600', 'dark:text-slate-400', 'mb-6'])}>{error}</p>
           <div className={c(['space-x-4'])}>
             <Link
               to="/"
@@ -122,17 +137,17 @@ export const RepositoryPage = () => {
                 'px-4',
                 'py-2',
                 'border',
-                'border-gray-300',
-                'dark:border-gray-600',
+                'border-slate-300',
+                'dark:border-slate-700',
                 'rounded-md',
                 'text-sm',
                 'font-medium',
-                'text-gray-700',
-                'dark:text-gray-200',
+                'text-slate-900',
+                'dark:text-slate-50',
                 'bg-white',
-                'dark:bg-gray-700',
-                'hover:bg-gray-50',
-                'dark:hover:bg-gray-600'
+                'dark:bg-slate-800',
+                'hover:bg-slate-50',
+                'dark:hover:bg-slate-700'
               ])}
             >
               <FaHome className={c(['mr-2'])} />
@@ -141,7 +156,7 @@ export const RepositoryPage = () => {
             {error.includes('rate limit') && (
               <button
                 onClick={() => setShowAuthModal(true)}
-                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-blue-600 hover:bg-blue-700"
+                className="inline-flex items-center px-4 py-2 border border-transparent rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700"
               >
                 Authenticate
               </button>
@@ -153,22 +168,22 @@ export const RepositoryPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+      <header className="bg-white dark:bg-slate-900 border-b border-slate-300 dark:border-slate-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <Link
                 to="/"
-                className="flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 mr-6"
+                className="flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mr-6"
               >
                 <img src="/logo.svg" alt="GetHub.cc Logo" className="w-6 h-6 mr-2" />
                 <span className="text-xl font-bold">GetHub.cc</span>
               </Link>
               <div className="flex items-center">
-                <FaGithub className="text-gray-600 dark:text-gray-300 text-xl mr-3" />
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <FaGithub className="text-slate-600 dark:text-slate-400 text-xl mr-3" />
+                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
                   {owner}/{repo}
                 </h1>
               </div>
@@ -176,7 +191,7 @@ export const RepositoryPage = () => {
 
             <div className="flex items-center space-x-4">
               {!manifest && (
-                <div className="text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 px-3 py-1 rounded">
+                <div className="text-sm text-yellow-700 dark:text-yellow-500 bg-yellow-100 dark:bg-[rgba(187,128,9,0.15)] px-3 py-1 rounded">
                   No gethub.json found
                 </div>
               )}
@@ -184,7 +199,7 @@ export const RepositoryPage = () => {
                 href={`https://github.com/${owner}/${repo}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                className="inline-flex items-center px-4 py-2 border border-slate-300 dark:border-slate-700 rounded-md text-sm font-medium text-slate-900 dark:text-slate-50 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700"
               >
                 <FaGithub className="mr-2" />
                 View on GitHub
@@ -193,7 +208,7 @@ export const RepositoryPage = () => {
           </div>
 
           {userPlatform.os && (
-            <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
+            <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">
               Detected platform: {userPlatform.os} {userPlatform.arch}
             </p>
           )}
@@ -206,11 +221,11 @@ export const RepositoryPage = () => {
           <ReleaseList releases={releases} manifest={manifest} userPlatform={userPlatform} />
         ) : (
           <div className="text-center py-12">
-            <FaExclamationTriangle className="h-16 w-16 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            <FaExclamationTriangle className="h-16 w-16 text-slate-600 dark:text-slate-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-slate-900 dark:text-slate-50 mb-2">
               No releases found
             </h3>
-            <p className="text-gray-600 dark:text-gray-300">
+            <p className="text-slate-600 dark:text-slate-400">
               This repository doesn't have any releases yet.
             </p>
           </div>
