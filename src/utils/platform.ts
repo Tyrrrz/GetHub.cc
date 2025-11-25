@@ -56,8 +56,8 @@ export const formatPlatform = (os?: OS, arch?: Architecture): string => {
   };
 
   const archNames: Record<Architecture, string> = {
-    x86: '32-bit',
-    x64: '64-bit',
+    x86: 'x86',
+    x64: 'x64',
     arm: 'ARM',
     arm64: 'ARM64'
   };

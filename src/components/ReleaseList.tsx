@@ -1,6 +1,6 @@
 import type { GitHubRelease } from '@/utils/github';
-import type { Manifest, Rule } from '@/utils/manifest';
-import { matchAsset } from '@/utils/manifest';
+import type { Architecture, Manifest, OS, Rule } from '@/utils/manifest';
+import { detectAssetPlatform, matchAsset } from '@/utils/manifest';
 import type { PlatformInfo } from '@/utils/platform';
 import { formatPlatform } from '@/utils/platform';
 import c from 'classnames';
@@ -21,6 +21,7 @@ interface EnrichedAsset {
   browser_download_url: string;
   content_type: string;
   matchedRule?: Rule;
+  detectedPlatform?: { os?: OS; arch?: Architecture; tags?: string[] };
   isRecommended?: boolean;
 }
 
@@ -29,7 +30,7 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
   const [osFilter, setOsFilter] = useState<string>('all');
   const [tagFilter, setTagFilter] = useState<string>('all');
 
-  // Enrich assets with manifest information
+  // Enrich assets with manifest information or automatic detection
   const enrichedReleases = useMemo(() => {
     return releases.map((release) => ({
       ...release,
@@ -37,7 +38,7 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
         const enrichedAsset: EnrichedAsset = { ...asset };
 
         if (manifest) {
-          // Find matching rule
+          // Find matching rule from manifest
           const matchedRule = manifest.rules.find((rule) => matchAsset(asset.name, rule));
           if (matchedRule) {
             enrichedAsset.matchedRule = matchedRule;
@@ -46,6 +47,18 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
             if (userPlatform.os && userPlatform.arch) {
               enrichedAsset.isRecommended =
                 matchedRule.os === userPlatform.os && matchedRule.arch === userPlatform.arch;
+            }
+          }
+        } else {
+          // Automatic platform detection when no manifest
+          const detected = detectAssetPlatform(asset.name);
+          if (detected.os || detected.arch || detected.tags) {
+            enrichedAsset.detectedPlatform = detected;
+
+            // Check if this asset is recommended for user's platform
+            if (userPlatform.os && userPlatform.arch && detected.os && detected.arch) {
+              enrichedAsset.isRecommended =
+                detected.os === userPlatform.os && detected.arch === userPlatform.arch;
             }
           }
         }
@@ -67,22 +80,52 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
   }, [releases]);
 
   const availableOS = useMemo(() => {
-    if (!manifest) return [];
-    const osSet = new Set(manifest.rules.map((rule) => rule.os).filter(Boolean));
+    const osSet = new Set<string>();
+
+    if (manifest) {
+      // Get OS from manifest rules
+      manifest.rules.forEach((rule) => {
+        if (rule.os) osSet.add(rule.os);
+      });
+    } else {
+      // Get OS from automatic detection
+      enrichedReleases.forEach((release) => {
+        release.assets.forEach((asset) => {
+          if (asset.detectedPlatform?.os) {
+            osSet.add(asset.detectedPlatform.os);
+          }
+        });
+      });
+    }
+
     return Array.from(osSet).map((os) => ({
-      value: os!,
-      label: formatPlatform(os!, undefined)
+      value: os,
+      label: formatPlatform(os as OS, undefined)
     }));
-  }, [manifest]);
+  }, [manifest, enrichedReleases]);
 
   const availableTags = useMemo(() => {
-    if (!manifest) return [];
-    const tagSet = new Set(manifest.rules.flatMap((rule) => rule.tags || []));
+    const tagSet = new Set<string>();
+
+    if (manifest) {
+      // Get tags from manifest rules
+      manifest.rules.forEach((rule) => {
+        rule.tags?.forEach((tag) => tagSet.add(tag));
+      });
+    } else {
+      // Get tags from automatic detection
+      enrichedReleases.forEach((release) => {
+        release.assets.forEach((asset) => {
+          asset.detectedPlatform?.tags?.forEach((tag) => tagSet.add(tag));
+        });
+      });
+    }
+
     return Array.from(tagSet).map((tag) => ({
       value: tag,
       label: tag
     }));
-  }, [manifest]);
+  }, [manifest, enrichedReleases]);
 
   // Filter releases
   const filteredReleases = useMemo(() => {
@@ -95,23 +138,48 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
       filtered = filtered.filter((release) => release.tag_name === selectedVersion);
     }
 
-    // Apply filters to assets
+    // Apply filters to assets and sort them
     return filtered
       .map((release) => ({
         ...release,
-        assets: release.assets.filter((asset) => {
-          // OS filter
-          if (osFilter !== 'all' && asset.matchedRule?.os !== osFilter) {
-            return false;
-          }
+        assets: release.assets
+          .filter((asset) => {
+            // OS filter
+            if (osFilter !== 'all') {
+              const assetOS = asset.matchedRule?.os || asset.detectedPlatform?.os;
+              if (assetOS !== osFilter) {
+                return false;
+              }
+            }
 
-          // Tag filter
-          if (tagFilter !== 'all' && !asset.matchedRule?.tags?.includes(tagFilter)) {
-            return false;
-          }
+            // Tag filter
+            if (tagFilter !== 'all') {
+              const assetTags = asset.matchedRule?.tags || asset.detectedPlatform?.tags || [];
+              if (!assetTags.includes(tagFilter)) {
+                return false;
+              }
+            }
 
-          return true;
-        })
+            return true;
+          })
+          .sort((a, b) => {
+            // Recommended assets first
+            if (a.isRecommended && !b.isRecommended) return -1;
+            if (!a.isRecommended && b.isRecommended) return 1;
+
+            // Then group by OS
+            const aOS = a.matchedRule?.os || a.detectedPlatform?.os || '';
+            const bOS = b.matchedRule?.os || b.detectedPlatform?.os || '';
+            if (aOS !== bOS) return aOS.localeCompare(bOS);
+
+            // Then by architecture within same OS
+            const aArch = a.matchedRule?.arch || a.detectedPlatform?.arch || '';
+            const bArch = b.matchedRule?.arch || b.detectedPlatform?.arch || '';
+            if (aArch !== bArch) return aArch.localeCompare(bArch);
+
+            // Finally by name
+            return a.name.localeCompare(b.name);
+          })
       }))
       .filter((release) => release.assets.length > 0);
   }, [enrichedReleases, selectedVersion, osFilter, tagFilter]);
@@ -262,23 +330,32 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
                     <div className="flex items-center text-sm text-gray-600 dark:text-gray-300 mt-1 space-x-4">
                       <span>{formatFileSize(asset.size)}</span>
                       <span>{asset.download_count.toLocaleString()} downloads</span>
-                      {asset.matchedRule && (
+                      {/* Display platform info from manifest or detection */}
+                      {(asset.matchedRule || asset.detectedPlatform) && (
                         <>
-                          {asset.matchedRule.os && asset.matchedRule.arch && (
+                          {((asset.matchedRule?.os && asset.matchedRule?.arch) ||
+                            (asset.detectedPlatform?.os && asset.detectedPlatform?.arch)) && (
                             <span>
-                              {formatPlatform(asset.matchedRule.os, asset.matchedRule.arch)}
+                              {formatPlatform(
+                                (asset.matchedRule?.os || asset.detectedPlatform?.os)!,
+                                (asset.matchedRule?.arch || asset.detectedPlatform?.arch)!
+                              )}
                             </span>
                           )}
-                          {asset.matchedRule.tags && asset.matchedRule.tags.length > 0 && (
+                          {((asset.matchedRule?.tags && asset.matchedRule.tags.length > 0) ||
+                            (asset.detectedPlatform?.tags &&
+                              asset.detectedPlatform.tags.length > 0)) && (
                             <span className="flex items-center">
-                              {asset.matchedRule.tags.map((tag) => (
-                                <span
-                                  key={tag}
-                                  className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded mr-1"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
+                              {(asset.matchedRule?.tags || asset.detectedPlatform?.tags || []).map(
+                                (tag) => (
+                                  <span
+                                    key={tag}
+                                    className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs rounded mr-1"
+                                  >
+                                    {tag}
+                                  </span>
+                                )
+                              )}
                             </span>
                           )}
                         </>
