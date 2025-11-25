@@ -1,5 +1,6 @@
-import type { GitHubRelease } from '@/utils/github';
-import type { Architecture, Manifest, OS, Rule } from '@/utils/manifest';
+import { formatDate, formatFileSize, formatNumber } from '@/utils/formatting';
+import type { GitHubAsset, GitHubRelease } from '@/utils/github';
+import type { Architecture, Manifest, OS } from '@/utils/manifest';
 import { detectAssetPlatform, matchAsset } from '@/utils/manifest';
 import type { PlatformInfo } from '@/utils/platform';
 import { formatArchitecture, formatOS } from '@/utils/platform';
@@ -13,17 +14,12 @@ interface ReleaseListProps {
   userPlatform: PlatformInfo;
 }
 
-interface EnrichedAsset {
-  id: number;
-  name: string;
-  size: number;
-  download_count: number;
-  browser_download_url: string;
-  content_type: string;
-  digest?: string;
-  matchedRule?: Rule;
-  detectedPlatform?: { os?: OS; arch?: Architecture; tags?: string[] };
+interface EnrichedAsset extends GitHubAsset {
   isRecommended?: boolean;
+  os?: OS;
+  arch?: Architecture;
+  tags?: string[];
+  description?: string;
 }
 
 export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListProps) => {
@@ -42,13 +38,18 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
           // Find matching rule from manifest
           const matchedRule = manifest.rules.find((rule) => matchAsset(asset.name, rule));
           if (matchedRule) {
-            enrichedAsset.matchedRule = matchedRule;
+            enrichedAsset.os = matchedRule.os;
+            enrichedAsset.arch = matchedRule.arch;
+            enrichedAsset.tags = matchedRule.tags || [];
+            enrichedAsset.description = matchedRule.description;
           }
         } else {
           // Automatic platform detection when no manifest
           const detected = detectAssetPlatform(asset.name);
           if (detected.os || detected.arch || detected.tags) {
-            enrichedAsset.detectedPlatform = detected;
+            enrichedAsset.os = detected.os;
+            enrichedAsset.arch = detected.arch;
+            enrichedAsset.tags = detected.tags || [];
           }
         }
 
@@ -63,14 +64,11 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
       // First pass: find exact OS+arch matches
       let hasExactMatch = false;
       const assetsWithRecommendations = release.assets.map((asset) => {
-        const assetOS = asset.matchedRule?.os || asset.detectedPlatform?.os;
-        const assetArch = asset.matchedRule?.arch || asset.detectedPlatform?.arch;
-
         const isExactMatch =
           userPlatform.os &&
           userPlatform.arch &&
-          assetOS === userPlatform.os &&
-          assetArch === userPlatform.arch;
+          asset.os === userPlatform.os &&
+          asset.arch === userPlatform.arch;
 
         if (isExactMatch) {
           hasExactMatch = true;
@@ -84,8 +82,7 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
         return {
           ...release,
           assets: assetsWithRecommendations.map((asset) => {
-            const assetOS = asset.matchedRule?.os || asset.detectedPlatform?.os;
-            const isOSMatch = assetOS === userPlatform.os;
+            const isOSMatch = asset.os === userPlatform.os;
             return { ...asset, isRecommended: isOSMatch };
           })
         };
@@ -118,8 +115,8 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
       // Get OS from automatic detection
       enrichedReleases.forEach((release) => {
         release.assets.forEach((asset) => {
-          if (asset.detectedPlatform?.os) {
-            osSet.add(asset.detectedPlatform.os);
+          if (asset.os) {
+            osSet.add(asset.os);
           }
         });
       });
@@ -143,7 +140,7 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
       // Get tags from automatic detection
       enrichedReleases.forEach((release) => {
         release.assets.forEach((asset) => {
-          asset.detectedPlatform?.tags?.forEach((tag) => tagSet.add(tag));
+          asset.tags?.forEach((tag) => tagSet.add(tag));
         });
       });
     }
@@ -173,16 +170,14 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
           .filter((asset) => {
             // OS filter
             if (osFilter !== 'all') {
-              const assetOS = asset.matchedRule?.os || asset.detectedPlatform?.os;
-              if (assetOS !== osFilter) {
+              if (asset.os !== osFilter) {
                 return false;
               }
             }
 
             // Tag filter
             if (tagFilter !== 'all') {
-              const assetTags = asset.matchedRule?.tags || asset.detectedPlatform?.tags || [];
-              if (!assetTags.includes(tagFilter)) {
+              if (!asset.tags?.includes(tagFilter)) {
                 return false;
               }
             }
@@ -195,13 +190,13 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
             if (!a.isRecommended && b.isRecommended) return 1;
 
             // Then group by OS
-            const aOS = a.matchedRule?.os || a.detectedPlatform?.os || '';
-            const bOS = b.matchedRule?.os || b.detectedPlatform?.os || '';
+            const aOS = a.os || '';
+            const bOS = b.os || '';
             if (aOS !== bOS) return aOS.localeCompare(bOS);
 
             // Then by architecture within same OS
-            const aArch = a.matchedRule?.arch || a.detectedPlatform?.arch || '';
-            const bArch = b.matchedRule?.arch || b.detectedPlatform?.arch || '';
+            const aArch = a.arch || '';
+            const bArch = b.arch || '';
             if (aArch !== bArch) return aArch.localeCompare(bArch);
 
             // Finally by name
@@ -210,22 +205,6 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
       }))
       .filter((release) => release.assets.length > 0);
   }, [releasesWithRecommendations, selectedVersion, osFilter, tagFilter]);
-
-  const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
-
-  const formatDate = (dateString: string): string => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
 
   return (
     <div className={c(['space-y-6'])}>
@@ -357,56 +336,43 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
                     <div className="flex items-center flex-wrap gap-2 text-sm text-slate-600 dark:text-slate-400 mt-1">
                       <span>{formatFileSize(asset.size)}</span>
                       <span>•</span>
-                      <span>{asset.download_count.toLocaleString()} downloads</span>
+                      <span>{formatNumber(asset.download_count)} downloads</span>
 
                       {/* Display platform info from manifest or detection */}
-                      {(asset.matchedRule || asset.detectedPlatform) && (
+                      {(asset.os || asset.arch) && (
                         <>
-                          {(asset.matchedRule?.os ||
-                            asset.detectedPlatform?.os ||
-                            asset.matchedRule?.arch ||
-                            asset.detectedPlatform?.arch) && <span>•</span>}
-                          {(asset.matchedRule?.os || asset.detectedPlatform?.os) && (
+                          <span>•</span>
+                          {asset.os && (
                             <span className="px-2 py-0.5 border-2 border-blue-500 dark:border-blue-400 text-blue-700 dark:text-blue-300 text-xs font-medium rounded">
-                              {formatOS((asset.matchedRule?.os || asset.detectedPlatform?.os)!)}
+                              {formatOS(asset.os)}
                             </span>
                           )}
-                          {(asset.matchedRule?.arch || asset.detectedPlatform?.arch) && (
+                          {asset.arch && (
                             <span className="px-2 py-0.5 border-2 border-blue-500 dark:border-blue-400 text-blue-700 dark:text-blue-300 text-xs font-medium rounded">
-                              {formatArchitecture(
-                                (asset.matchedRule?.arch || asset.detectedPlatform?.arch)!
-                              )}
+                              {formatArchitecture(asset.arch)}
                             </span>
                           )}
                         </>
                       )}
 
                       {/* Display tags from manifest or detection */}
-                      {(asset.matchedRule || asset.detectedPlatform) && (
+                      {asset.tags && asset.tags.length > 0 && (
                         <>
-                          {((asset.matchedRule?.tags && asset.matchedRule.tags.length > 0) ||
-                            (asset.detectedPlatform?.tags &&
-                              asset.detectedPlatform.tags.length > 0)) && (
-                            <>
-                              {(asset.matchedRule?.tags || asset.detectedPlatform?.tags || []).map(
-                                (tag) => (
-                                  <span
-                                    key={tag}
-                                    className="px-2 py-0.5 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-xs rounded"
-                                  >
-                                    {tag}
-                                  </span>
-                                )
-                              )}
-                            </>
-                          )}
+                          {asset.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-2 py-0.5 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-xs rounded"
+                            >
+                              {tag}
+                            </span>
+                          ))}
                         </>
                       )}
                     </div>
 
-                    {asset.matchedRule?.description && (
+                    {asset.description && (
                       <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
-                        {asset.matchedRule.description}
+                        {asset.description}
                       </p>
                     )}
 
