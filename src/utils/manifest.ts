@@ -36,7 +36,7 @@ Example gethub.json manifest:
 }
 */
 
-export type OS = 'windows' | 'linux' | 'osx';
+export type OS = 'windows' | 'linux' | 'osx' | 'android';
 export type Architecture = 'x86' | 'x64' | 'arm' | 'arm64';
 
 export type Rule = {
@@ -83,12 +83,14 @@ export const detectAssetPlatform = (
   ) {
     os = 'windows';
   } else if (
-    /linux|ubuntu|debian|fedora|rhel|centos/i.test(lowerName) ||
+    /linux|ubuntu|debian|fedora|rhel|centos|AppImage/i.test(lowerName) ||
     /\blinux\b/i.test(lowerName)
   ) {
     os = 'linux';
   } else if (/macos|osx|darwin|mac-/i.test(lowerName) || /\bmac\b/i.test(lowerName)) {
     os = 'osx';
+  } else if (/android|\.apk$/i.test(lowerName)) {
+    os = 'android';
   }
 
   // Detect architecture
