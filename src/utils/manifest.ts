@@ -111,6 +111,9 @@ export const detectAssetPlatform = (
   if (/\b(gui|desktop)\b/i.test(lowerName)) {
     tags.push('GUI');
   }
+  if (/\b(musl)\b/i.test(lowerName)) {
+    tags.push('Musl');
+  }
 
   return {
     os,
