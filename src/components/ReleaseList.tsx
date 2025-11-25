@@ -20,6 +20,7 @@ interface EnrichedAsset {
   download_count: number;
   browser_download_url: string;
   content_type: string;
+  digest?: string;
   matchedRule?: Rule;
   detectedPlatform?: { os?: OS; arch?: Architecture; tags?: string[] };
   isRecommended?: boolean;
@@ -396,6 +397,12 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
                       <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
                         {asset.matchedRule.description}
                       </p>
+                    )}
+
+                    {asset.digest && (
+                      <div className="mt-2 text-xs text-gray-500 dark:text-gray-400 font-mono break-all">
+                        {asset.digest}
+                      </div>
                     )}
                   </div>
 

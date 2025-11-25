@@ -19,6 +19,7 @@ export interface GitHubAsset {
   download_count: number;
   browser_download_url: string;
   content_type: string;
+  digest?: string;
 }
 
 export class GitHubAPI {
@@ -53,7 +54,8 @@ export class GitHubAPI {
           size: asset.size,
           download_count: asset.download_count,
           browser_download_url: asset.browser_download_url,
-          content_type: asset.content_type || ''
+          content_type: asset.content_type || '',
+          digest: 'digest' in asset ? (asset.digest as string) : undefined
         }))
       }));
     } catch (error) {
