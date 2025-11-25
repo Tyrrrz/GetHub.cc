@@ -10,6 +10,18 @@
       content="Streamlined downloads for GitHub releases with smart platform detection"
     />
     <title>GetHub.cc - Streamlined GitHub Downloads</title>
+    <script>
+      // Single Page Apps for GitHub Pages
+      // https://github.com/rafgraph/spa-github-pages
+      // Restore the path from 404.html redirect
+      (function () {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

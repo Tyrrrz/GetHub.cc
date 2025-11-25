@@ -362,9 +362,10 @@ export const ReleaseList = ({ releases, manifest, userPlatform }: ReleaseListPro
                       {/* Display platform info from manifest or detection */}
                       {(asset.matchedRule || asset.detectedPlatform) && (
                         <>
-                          {(asset.matchedRule?.os || asset.detectedPlatform?.os || asset.matchedRule?.arch || asset.detectedPlatform?.arch) && (
-                            <span>•</span>
-                          )}
+                          {(asset.matchedRule?.os ||
+                            asset.detectedPlatform?.os ||
+                            asset.matchedRule?.arch ||
+                            asset.detectedPlatform?.arch) && <span>•</span>}
                           {(asset.matchedRule?.os || asset.detectedPlatform?.os) && (
                             <span className="px-2 py-0.5 border-2 border-blue-500 dark:border-blue-400 text-blue-700 dark:text-blue-300 text-xs font-medium rounded">
                               {formatPlatform(asset.matchedRule?.os || asset.detectedPlatform?.os)}
