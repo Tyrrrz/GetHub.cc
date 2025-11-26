@@ -1,9 +1,9 @@
-import { Button } from '@/components/Button';
-import { Input } from '@/components/Input';
 import c from 'classnames';
 import { useState } from 'react';
 import { FaGithub, FaRocket } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '~/components/Button';
+import { Input } from '~/components/Input';
 
 export const HomePage = () => {
   const [repoUrl, setRepoUrl] = useState('');

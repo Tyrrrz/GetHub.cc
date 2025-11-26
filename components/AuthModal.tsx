@@ -1,9 +1,9 @@
-import { Button } from '@/components/Button';
-import { Card } from '@/components/Card';
-import { Input } from '@/components/Input';
 import c from 'classnames';
 import { useState } from 'react';
 import { FaGithub, FaKey, FaTimes } from 'react-icons/fa';
+import { Button } from '~/components/Button';
+import { Card } from '~/components/Card';
+import { Input } from '~/components/Input';
 
 interface AuthModalProps {
   onAuthenticate: (token: string) => void;

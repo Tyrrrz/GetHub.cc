@@ -1,15 +1,3 @@
-import { AuthModal } from '@/components/AuthModal';
-import { Badge } from '@/components/Badge';
-import { Button } from '@/components/Button';
-import { Card, CardHeader, CardSection } from '@/components/Card';
-import { EmptyState } from '@/components/EmptyState';
-import { Select } from '@/components/Select';
-import { formatDate, formatFileSize, formatNumber } from '@/utils/formatting';
-import type { GitHubAsset, GitHubRelease } from '@/utils/github';
-import { GitHubAPI } from '@/utils/github';
-import type { Architecture, Manifest, OS } from '@/utils/manifest';
-import { detectAssetPlatform, matchAsset } from '@/utils/manifest';
-import { detectPlatform, formatArchitecture, formatOS } from '@/utils/platform';
 import c from 'classnames';
 import { useEffect, useMemo, useState } from 'react';
 import {
@@ -23,6 +11,18 @@ import {
   FaTag
 } from 'react-icons/fa';
 import { Link, useParams } from 'react-router-dom';
+import { AuthModal } from '~/components/AuthModal';
+import { Badge } from '~/components/Badge';
+import { Button } from '~/components/Button';
+import { Card, CardHeader, CardSection } from '~/components/Card';
+import { EmptyState } from '~/components/EmptyState';
+import { Select } from '~/components/Select';
+import { formatDate, formatFileSize, formatNumber } from '~/utils/formatting';
+import type { GitHubAsset, GitHubRelease } from '~/utils/github';
+import { GitHubAPI } from '~/utils/github';
+import type { Architecture, Manifest, OS } from '~/utils/manifest';
+import { detectAssetPlatform, matchAsset } from '~/utils/manifest';
+import { detectPlatform, formatArchitecture, formatOS } from '~/utils/platform';
 
 interface EnrichedAsset extends GitHubAsset {
   isRecommended?: boolean;

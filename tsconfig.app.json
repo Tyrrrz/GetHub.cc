@@ -17,7 +17,6 @@
     /* Path mapping */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"],
       "~/*": ["./*"]
     },
     /* Linting */
@@ -32,5 +31,6 @@
     "noUncheckedSideEffectImports": true,
     "pretty": true
   },
-  "include": ["src"]
+  "include": ["**/*"],
+  "exclude": ["node_modules"]
 }
