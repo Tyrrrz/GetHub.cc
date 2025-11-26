@@ -1,3 +1,6 @@
+import { Button } from '@/components/Button';
+import { Card } from '@/components/Card';
+import { Input } from '@/components/Input';
 import c from 'classnames';
 import { useState } from 'react';
 import { FaGithub, FaKey, FaTimes } from 'react-icons/fa';
@@ -22,8 +25,8 @@ export const AuthModal = ({ onAuthenticate, onClose }: AuthModalProps) => {
       className={c([
         'fixed',
         'inset-0',
-        'bg-slate-900',
-        'dark:bg-slate-950',
+        'bg-gray-900',
+        'dark:bg-black',
         'bg-opacity-50',
         'dark:bg-opacity-75',
         'overflow-y-auto',
@@ -32,33 +35,18 @@ export const AuthModal = ({ onAuthenticate, onClose }: AuthModalProps) => {
         'z-50'
       ])}
     >
-      <div
-        className={c([
-          'relative',
-          'top-20',
-          'mx-auto',
-          'p-5',
-          'border',
-          'border-slate-300',
-          'dark:border-slate-700',
-          'w-96',
-          'shadow-lg',
-          'rounded-md',
-          'bg-white',
-          'dark:bg-slate-900'
-        ])}
-      >
+      <Card className="relative top-20 mx-auto w-96">
         <div className={c(['flex', 'items-center', 'justify-between', 'mb-4'])}>
-          <h3 className={c(['text-lg', 'font-medium', 'text-slate-900', 'dark:text-slate-50'])}>
+          <h3 className={c(['text-lg', 'font-medium', 'text-gray-900', 'dark:text-gray-100'])}>
             GitHub Authentication
           </h3>
           <button
             onClick={onClose}
             className={c([
-              'text-slate-600',
-              'hover:text-slate-900',
-              'dark:text-slate-400',
-              'dark:hover:text-slate-50'
+              'text-gray-600',
+              'hover:text-gray-900',
+              'dark:text-gray-400',
+              'dark:hover:text-gray-100'
             ])}
           >
             <FaTimes />
@@ -66,19 +54,22 @@ export const AuthModal = ({ onAuthenticate, onClose }: AuthModalProps) => {
         </div>
 
         <div className={c(['mb-4'])}>
-          <p className={c(['text-sm', 'text-slate-600', 'dark:text-slate-400', 'mb-2'])}>
+          <p className={c(['text-sm', 'text-gray-600', 'dark:text-gray-400', 'mb-2'])}>
             To increase the API rate limit from 60 to 5,000 requests per hour, please provide a
             GitHub Personal Access Token.
           </p>
           <div
             className={c([
               'bg-blue-50',
-              'dark:bg-blue-900/10',
+              'dark:bg-blue-900/20',
               'p-3',
               'rounded',
               'text-sm',
-              'text-blue-600',
-              'dark:text-blue-400'
+              'text-blue-700',
+              'dark:text-blue-400',
+              'border',
+              'border-blue-200',
+              'dark:border-blue-800'
             ])}
           >
             <strong>How to create a token:</strong>
@@ -92,120 +83,27 @@ export const AuthModal = ({ onAuthenticate, onClose }: AuthModalProps) => {
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className={c(['mb-4'])}>
-            <label
-              htmlFor="github-token"
-              className={c([
-                'block',
-                'text-sm',
-                'font-medium',
-                'text-slate-900',
-                'dark:text-slate-50',
-                'mb-2'
-              ])}
-            >
-              Personal Access Token
-            </label>
-            <div className={c(['relative'])}>
-              <div
-                className={c([
-                  'absolute',
-                  'inset-y-0',
-                  'left-0',
-                  'pl-3',
-                  'flex',
-                  'items-center',
-                  'pointer-events-none'
-                ])}
-              >
-                <FaKey className={c(['h-4', 'w-4', 'text-slate-600', 'dark:text-slate-400'])} />
-              </div>
-              <input
-                id="github-token"
-                type="password"
-                placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                className={c([
-                  'block',
-                  'w-full',
-                  'pl-10',
-                  'pr-3',
-                  'py-2',
-                  'border',
-                  'border-slate-300',
-                  'dark:border-slate-700',
-                  'rounded-md',
-                  'text-sm',
-                  'bg-white',
-                  'dark:bg-slate-950',
-                  'text-slate-900',
-                  'dark:text-slate-50',
-                  'placeholder-slate-600',
-                  'dark:placeholder-slate-500',
-                  'focus:outline-none',
-                  'focus:ring-blue-500',
-                  'focus:border-blue-500'
-                ])}
-              />
-            </div>
-          </div>
+          <Input
+            id="github-token"
+            type="password"
+            label="Personal Access Token"
+            icon={<FaKey className="h-4 w-4" />}
+            placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+            value={token}
+            onChange={(e) => setToken(e.target.value)}
+          />
 
-          <div className={c(['flex', 'justify-end', 'space-x-3'])}>
-            <button
-              type="button"
-              onClick={onClose}
-              className={c([
-                'px-4',
-                'py-2',
-                'text-sm',
-                'font-medium',
-                'text-slate-900',
-                'dark:text-slate-50',
-                'bg-slate-50',
-                'dark:bg-slate-800',
-                'border',
-                'border-slate-300',
-                'dark:border-slate-700',
-                'rounded-md',
-                'hover:bg-slate-300',
-                'dark:hover:bg-slate-700',
-                'focus:outline-none',
-                'focus:ring-2',
-                'focus:ring-blue-500'
-              ])}
-            >
+          <div className={c(['flex', 'justify-end', 'space-x-3', 'mt-4'])}>
+            <Button type="button" onClick={onClose} variant="secondary">
               Skip
-            </button>
-            <button
-              type="submit"
-              disabled={!token.trim()}
-              className={c([
-                'px-4',
-                'py-2',
-                'text-sm',
-                'font-medium',
-                'text-white',
-                'bg-green-600',
-                'border',
-                'border-transparent',
-                'rounded-md',
-                'hover:bg-green-700',
-                'focus:outline-none',
-                'focus:ring-2',
-                'focus:ring-green-500',
-                'disabled:opacity-50',
-                'disabled:cursor-not-allowed'
-              ])}
-            >
+            </Button>
+            <Button type="submit" variant="success" disabled={!token.trim()}>
               Authenticate
-            </button>
+            </Button>
           </div>
         </form>
 
-        <div
-          className={c(['mt-4', 'pt-4', 'border-t', 'border-slate-300', 'dark:border-slate-700'])}
-        >
+        <div className={c(['mt-4', 'pt-4', 'border-t', 'border-gray-200', 'dark:border-gray-700'])}>
           <a
             href="https://github.com/settings/tokens"
             target="_blank"
@@ -224,7 +122,7 @@ export const AuthModal = ({ onAuthenticate, onClose }: AuthModalProps) => {
             Create token on GitHub
           </a>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import { HomePage } from '@/components/HomePage';
-import { RepositoryPage } from '@/components/RepositoryPage';
+import { HomePage } from '@/pages/HomePage';
+import { RepositoryPage } from '@/pages/RepositoryPage';
 import c from 'classnames';
 import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
 
